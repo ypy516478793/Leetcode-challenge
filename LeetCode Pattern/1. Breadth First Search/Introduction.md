@@ -64,7 +64,6 @@ def BFSTreeSearch (root):
   # Return something: we can follow this template and use some variables to record the height or node value layer by layer
   return result
 ```
-
 ### **JavaScript**
 ```js
 const BFSTreeSearch = (root) => {
@@ -118,3 +117,69 @@ const BFSTreeSearch = (root) => {
   }
 }
 ```
+## **BFS Graph 模板 Template:**
+### **Python**
+```py
+def BFSGraphSearch (relationship, num, root):
+  # Construct the graph.
+  graph = dict()
+  for (start, end) in relationship:
+    graph[start].append(end)
+  # Initialize queue to record nodes by layers
+  queue = [root]
+
+  # While-loop over queue until no more node
+  # In this template, we loop over entire layer at a single while loop
+  while queue:
+    levelSize = len(queue)
+    # loop over all nodes in the current layer
+    for i in range(levelSize):
+      # take out one node from the queue
+      node = queue.pop(0)
+      # put in all neighbors of this node to the queue
+      for neighbor in graph[node]:
+        # Add the connected node to the queue
+        queue.push(neighbor)
+
+  # Return something: we can follow this template and use some variables to record the height or node value layer by layer
+  return result
+```
+
+## **Best First Search (Dijsktra's Algorithm) Graph 模板 Template:**
+### **Python**
+```py
+import heapq
+def BFSGraphSearch (relationship, num, root, [optional] destination):
+  # Construct the graph and initialize the visited map (costs)
+  graph = dict()
+  costs = dict()
+  for (start, end, cost) in relationship:
+    graph[start].append((end, cost))
+
+  # Initialize heap to record cost and nodes
+  # heapq won't instantiate a new heap object, but works on list (static methods)
+  # heapq only works on min heap. If want to create max heap, negatively reverse all numbers. Put cost ahead of the node.
+  minheap = [(0, root)]
+
+  # While-loop over heap until no more node
+  # In this template, we loop over entire layer at a single while loop
+  while minheap:
+    # Pop the optimal current node to visit, top = heapq.heappop(minheap)
+    node = heapq.heappop(minheap)
+    # If visited before, skip it
+    if (node[1] in costs):
+      continue
+    # Update the cost of the current node
+    costs[node[1]] = node[0]
+    # If this is the destination, return the cost
+    if node[1] == destination:
+      return costs[node[1]]
+    # loop over all connected nodes of this node, and add them to the heap.
+    for (neighbor, cost) in graph[node]:
+      # Add the connected node and the cost to reach this node to the heap, heapq.heappush(minheap, item)
+      heapq.heappush(minheap, (node[0] + cost, neighbor))
+
+  # Return something: most likely maximum costs 
+  return max(costs.values())
+```
+
