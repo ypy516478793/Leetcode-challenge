@@ -123,6 +123,8 @@ const BFSTreeSearch = (root) => {
 def BFSGraphSearch (relationship, num, root):
   # Construct the graph.
   graph = dict()
+  for node in num:
+    graph[node] = []
   for (start, end) in relationship:
     graph[start].append(end)
   # Initialize queue to record nodes by layers
@@ -153,6 +155,8 @@ def BFSGraphSearch (relationship, num, root, [optional] destination):
   # Construct the graph and initialize the visited map (costs)
   graph = dict()
   costs = dict()
+  for node in num:
+    graph[node] = []
   for (start, end, cost) in relationship:
     graph[start].append((end, cost))
 
@@ -181,5 +185,47 @@ def BFSGraphSearch (relationship, num, root, [optional] destination):
 
   # Return something: most likely maximum costs 
   return max(costs.values())
+```
+## **Topological Sort Graph 模板 Template:**
+### **Python**
+```py
+def BFSGraphSearch (relationship, num, root, [optional] destination):
+  # Construct the graph and initialize the visited map (costs)
+  graph = dict()
+  indegree = dict()
+  for node in num:
+    graph[node] = []
+    indegree[item] = 0
+  for (start, end, cost) in relationship:
+    graph[start].append(end)
+    indegree[end] += 1
+
+  # Initialize queue to record nodes by layers
+  queue = list()
+  # Initialize queue with all node with indegree value 0
+  for key in indegree:
+    if indegree[key] == 0:
+      queue.append(key)
+  # Now we can do BFS search until queue empty
+  # we may also step up result variables such as 'path' or 'count'
+  path = [] 
+  while queue:
+    ## BFS: queue out: 
+    # take out the current node and update result
+    node = queue.pop(0)
+    path.append(node)
+    ## BFS: queue in: 
+    # for the current node, find its all adjacent neighbors to whom the current node is pointing
+    for neighbor in graph[node]:
+      indegree[neighbor] -= 1
+      # if find new zero-in-degree node, we push it to the queue
+      if indegree[neighbor] == 0:
+        queue.append(neighbor)
+
+  ## Step 4: usually the final result should have the same length of all items
+  if len(path) == num:
+    return True
+  else:
+    return False
 ```
 
